@@ -1,0 +1,23 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+p {
+  color: #f00;
+}
+
+canvas {
+  position: absolute;
+  z-index: 2;
+  left: 0px;
+  top: 0px;
+  width: 2048px;
+  height: 484px;
+}
