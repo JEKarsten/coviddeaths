@@ -9,15 +9,35 @@ body {
   overflow: hidden;
 }
 
-p {
-  color: #f00;
+div {
+  text-transform: uppercase;
+}
+
+div.new {
+  z-index: 100;
+  position: relative;
+  font-size: large;
+  animation-name: move;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+}
+
+@keyframes move {
+  0% {
+    color: red;
+    left:0px
+  }
+  50% {
+    left: 500px;
+  }
+  100% {
+    color: orange;
+    left: 0px;
+  }
 }
 
 canvas {
   position: absolute;
   z-index: 2;
-  left: 0px;
-  top: 0px;
-  width: 2048px;
-  height: 484px;
+  width: 100%;
 }
