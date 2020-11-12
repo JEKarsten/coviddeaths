@@ -1,12 +1,33 @@
+var MIN_FONT_SIZE = 34;
+var MAX_FONT_SIZE = 55;
+var MIN_SPEED = 10;
+var MAX_SPEED = 7;
+var PAGE_TOP = 0;
+var PAGE_BOTTOM = visualViewport.height;
+var SICKNESS_PROBABILITY = .8;
+var MIN_HEALTHY_TIME = 2;
+var MAX_HEALTHY_TIME = 2;
+
 var POPULAR_NAMES = ["James",  "John",  "Robert",  "Michael",  "William",  "David",  "Richard",  "Joseph",  "Thomas",  "Charles",  "Christopher",  "Daniel",  "Matthew",  "Anthony",  "Donald",  "Mark",  "Paul",  "Steven",  "Andrew",  "Kenneth",  "Joshua",  "Kevin",  "Brian",  "George",  "Edward",  "Ronald",  "Timothy",  "Jason",  "Jeffrey",  "Ryan",  "Jacob",  "Gary",  "Nicholas",  "Eric",  "Jonathan",  "Stephen",  "Larry",  "Justin",  "Scott",  "Brandon",  "Benjamin",  "Samuel",  "Frank",  "Gregory",  "Raymond",  "Alexander",  "Patrick",  "Jack",  "Dennis",  "Jerry",  "Tyler",  "Aaron",  "Jose",  "Henry",  "Adam",  "Douglas",  "Nathan",  "Peter",  "Zachary",  "Kyle",  "Walter",  "Harold",  "Jeremy",  "Ethan",  "Carl",  "Keith",  "Roger",  "Gerald",  "Christian",  "Terry",  "Sean",  "Arthur",  "Austin",  "Noah",  "Lawrence",  "Jesse",  "Joe",  "Bryan",  "Billy",  "Jordan",  "Albert",  "Dylan",  "Bruce",  "Willie",  "Gabriel",  "Alan",  "Juan",  "Logan",  "Wayne",  "Ralph",  "Roy",  "Eugene",  "Randy",  "Vincent",  "Russell",  "Louis",  "Philip",  "Bobby",  "Johnny",  "Bradley",  "Mary",  "Patricia",  "Jennifer",  "Linda",  "Elizabeth",  "Barbara",  "Susan",  "Jessica",  "Sarah",  "Karen",  "Nancy",  "Lisa",  "Margaret",  "Betty",  "Sandra",  "Ashley",  "Dorothy",  "Kimberly",  "Emily",  "Donna",  "Michelle",  "Carol",  "Amanda",  "Melissa",  "Deborah",  "Stephanie",  "Rebecca",  "Laura",  "Sharon",  "Cynthia",  "Kathleen",  "Amy",  "Shirley",  "Angela",  "Helen",  "Anna",  "Brenda",  "Pamela",  "Nicole",  "Samantha",  "Katherine",  "Emma",  "Ruth",  "Christine",  "Catherine",  "Debra",  "Rachel",  "Carolyn",  "Janet",  "Virginia",  "Maria",  "Heather",  "Diane",  "Julie",  "Joyce",  "Victoria",  "Kelly",  "Christina",  "Lauren",  "Joan",  "Evelyn",  "Olivia",  "Judith",  "Megan",  "Cheryl",  "Martha",  "Andrea",  "Frances",  "Hannah",  "Jacqueline",  "Ann",  "Gloria",  "Jean",  "Kathryn",  "Alice",  "Teresa",  "Sara",  "Janice",  "Doris",  "Madison",  "Julia",  "Grace",  "Judy",  "Abigail",  "Marie",  "Denise",  "Beverly",  "Amber",  "Theresa",  "Marilyn",  "Danielle",  "Diana",  "Brittany",  "Natalie",  "Sophia",  "Rose",  "Isabella",  "Alexis",  "Kayla",  "Charlotte"];
 
-function generateName() {
+function createName() {
   var name = document.createElement("div")
-  name.className = "new";
-  name.innerHTML = getRandomName() + ", " + getRandomAge().toString();
+  var speed = randomRange(MAX_SPEED, MIN_SPEED, true);
+
+  if (Math.random() < SICKNESS_PROBABILITY) {
+    name.className = "sick";
+  }
+
+  name.style.top = randomRange(PAGE_TOP, PAGE_BOTTOM, false) + "px";
+  name.style.fontSize = randomRange(MIN_FONT_SIZE, MAX_FONT_SIZE, false) + "px";
+  name.style.color = "#000";
+  name.style.animationDuration = speed + "s";
+
+  name.innerHTML = genName() + ", " + genAgeSick().toString();
+
   document.body.appendChild(name);
-  setTimeout(function(){$(name).remove();}, 5000);
-  setTimeout(generateName, 1000);
+  setTimeout(function(){$(name).remove();}, speed*1000);
+  setTimeout(createName, 1000);
 }
 
 /**
@@ -15,7 +36,7 @@ function generateName() {
  * 
  * @return {String} A random name
  */
-function getRandomName() {
+function genName() {
   return POPULAR_NAMES[Math.floor(Math.random() * POPULAR_NAMES.length)];
 }
 
@@ -26,7 +47,7 @@ function getRandomName() {
  * 
  * @return {int} An age from 5-94
  */
-function getRandomAge() {
+function genAgeSick() {
   random = Math.random();
   age = 0;
   console.log(random);
@@ -45,42 +66,18 @@ function getRandomAge() {
   return age;
 }
 
-/* 
-var context;
-var text = ""; */
-
-/* $(function test() {
-  context = document.getElementById("cvs").getContext("2d");
-  setInterval("animate()", 30);
-
-  textXpos = 200;
-  text = "Test";
-  setTimeout(test, 2000)
-}); */
-
-/* function animate() {
-  topBound = 0;
-  bottomBound = screen.height;
-  leftBound = 0;
-  rightBound = screen.width;
-
-  // Clear screen
-  context.clearRect(0, 0, rightBound, bottomBound);
-  context.globalAlpha = 1;
-  context.fillStyle = '#000';
-  //context.fillRect(0, 0, rightBound, bottomBound);
-
-  var metrics = context.measureText(text);
-  var textWidth = metrics.width;
-
-  if (textXpos < 10) {
-    textXpos = 200;
+/**
+ * Returns a random number within range
+ * 
+ * @param {int} min The minimum integer of range, inclusive
+ * @param {int} max The maximum integer of range, not inclusive
+ * @param {boolean} round A bool of whether to use the floor function
+ * @return {int} An integer betwen min and max
+ */
+function randomRange(min, max, round) {
+  if (round) {
+    return min + Math.floor(Math.random() * (max-min));
   } else {
-    textXpos -= 1;
+    return min + (Math.random() * (max-min));
   }
-
-  context.font = '20px _sans';
-  context.fillStyle = '#FF0000';
-  context.textBaseline = 'top';
-  context.fillText( text, textXpos, 100);    
-} */
+}

@@ -1,8 +1,4 @@
-html {
-  height: 100%;
-}
-
-body {
+html, body {
   height: 100%;
   margin: 0;
   background-color: #fff;
@@ -12,28 +8,28 @@ body {
 div {
   font-family: Helvetica, Arial, sans-serif;
   font-weight: bold;
-  font-size: 24px;
   text-transform: uppercase;
+  white-space: nowrap;
+  height: auto;
+  z-index: 100;
+  position: absolute;
+  animation-name: move;
+  animation-timing-function: linear;
 }
 
-div.new {
-  z-index: 100;
-  position: relative;
+div.sick {
   animation-name: move;
-  animation-duration: 5s;
-  animation-timing-function: linear;
 }
 
 @keyframes move {
   0% {
-    color: red;
     left: 100%;
   }
   50% {
     color: black;
   }
   100% {
-    left: -50%;
+    left: -100%;
     opacity: 50%;
   }
 }
