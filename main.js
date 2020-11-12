@@ -1,20 +1,17 @@
-var MIN_FONT_SIZE = 34;
-var MAX_FONT_SIZE = 55;
-var MIN_SPEED = 10;
-var MAX_SPEED = 7;
 var PAGE_TOP = 0;
 var PAGE_BOTTOM = visualViewport.height;
+var MIN_FONT_SIZE = 30;
+var MAX_FONT_SIZE = 55;
+var MIN_OPACITY = .70;
+var MAX_OPACITY = .95;
+var MIN_SPEED = 10;
+var MAX_SPEED = 7;
+var FREQUENCY = 2;
 var SICKNESS_PROBABILITY = .8;
 var MIN_HEALTHY_TIME = 2;
 var MAX_HEALTHY_TIME = 2;
 
 var POPULAR_NAMES = ["James",  "John",  "Robert",  "Michael",  "William",  "David",  "Richard",  "Joseph",  "Thomas",  "Charles",  "Christopher",  "Daniel",  "Matthew",  "Anthony",  "Donald",  "Mark",  "Paul",  "Steven",  "Andrew",  "Kenneth",  "Joshua",  "Kevin",  "Brian",  "George",  "Edward",  "Ronald",  "Timothy",  "Jason",  "Jeffrey",  "Ryan",  "Jacob",  "Gary",  "Nicholas",  "Eric",  "Jonathan",  "Stephen",  "Larry",  "Justin",  "Scott",  "Brandon",  "Benjamin",  "Samuel",  "Frank",  "Gregory",  "Raymond",  "Alexander",  "Patrick",  "Jack",  "Dennis",  "Jerry",  "Tyler",  "Aaron",  "Jose",  "Henry",  "Adam",  "Douglas",  "Nathan",  "Peter",  "Zachary",  "Kyle",  "Walter",  "Harold",  "Jeremy",  "Ethan",  "Carl",  "Keith",  "Roger",  "Gerald",  "Christian",  "Terry",  "Sean",  "Arthur",  "Austin",  "Noah",  "Lawrence",  "Jesse",  "Joe",  "Bryan",  "Billy",  "Jordan",  "Albert",  "Dylan",  "Bruce",  "Willie",  "Gabriel",  "Alan",  "Juan",  "Logan",  "Wayne",  "Ralph",  "Roy",  "Eugene",  "Randy",  "Vincent",  "Russell",  "Louis",  "Philip",  "Bobby",  "Johnny",  "Bradley",  "Mary",  "Patricia",  "Jennifer",  "Linda",  "Elizabeth",  "Barbara",  "Susan",  "Jessica",  "Sarah",  "Karen",  "Nancy",  "Lisa",  "Margaret",  "Betty",  "Sandra",  "Ashley",  "Dorothy",  "Kimberly",  "Emily",  "Donna",  "Michelle",  "Carol",  "Amanda",  "Melissa",  "Deborah",  "Stephanie",  "Rebecca",  "Laura",  "Sharon",  "Cynthia",  "Kathleen",  "Amy",  "Shirley",  "Angela",  "Helen",  "Anna",  "Brenda",  "Pamela",  "Nicole",  "Samantha",  "Katherine",  "Emma",  "Ruth",  "Christine",  "Catherine",  "Debra",  "Rachel",  "Carolyn",  "Janet",  "Virginia",  "Maria",  "Heather",  "Diane",  "Julie",  "Joyce",  "Victoria",  "Kelly",  "Christina",  "Lauren",  "Joan",  "Evelyn",  "Olivia",  "Judith",  "Megan",  "Cheryl",  "Martha",  "Andrea",  "Frances",  "Hannah",  "Jacqueline",  "Ann",  "Gloria",  "Jean",  "Kathryn",  "Alice",  "Teresa",  "Sara",  "Janice",  "Doris",  "Madison",  "Julia",  "Grace",  "Judy",  "Abigail",  "Marie",  "Denise",  "Beverly",  "Amber",  "Theresa",  "Marilyn",  "Danielle",  "Diana",  "Brittany",  "Natalie",  "Sophia",  "Rose",  "Isabella",  "Alexis",  "Kayla",  "Charlotte"];
-
-document.ontouchmove = function(event){
-  event.preventDefault();
-}
-
-
 
 function createName() {
   var name = document.createElement("div")
@@ -27,13 +24,14 @@ function createName() {
   name.style.top = randomRange(PAGE_TOP, PAGE_BOTTOM, false) + "px";
   name.style.fontSize = randomRange(MIN_FONT_SIZE, MAX_FONT_SIZE, false) + "px";
   name.style.color = "#000";
+  name.style.opacity = randomRange(MIN_OPACITY, MAX_OPACITY, false);
   name.style.animationDuration = speed + "s";
 
   name.innerHTML = genName() + ", " + genAgeSick().toString();
 
   document.body.appendChild(name);
   setTimeout(function(){$(name).remove();}, speed*1000);
-  setTimeout(createName, 1000);
+  setTimeout(createName, 1000 / FREQUENCY);
 }
 
 /**

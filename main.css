@@ -19,19 +19,32 @@ div {
 }
 
 div.sick {
-  animation-name: move;
+  animation-name: sickMove;
 }
 
 @keyframes move {
   0% {
     left: 100%;
   }
-  50% {
-    color: black;
+  100% {
+    left: -100%;
+  }
+}
+
+@keyframes sickMove {
+  0% {
+    left: 100%;
+  }
+  30% {
+    color: #f00;
+    opacity: 1;
+  }
+  40% {
+    opacity: 0;
   }
   100% {
     left: -100%;
-    opacity: 50%;
+    opacity: 0;
   }
 }
 
