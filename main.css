@@ -16,6 +16,7 @@ div {
   position: absolute;
   animation-name: move;
   animation-timing-function: linear;
+  will-change: auto;
 }
 
 div.sick {
