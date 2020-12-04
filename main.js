@@ -120,7 +120,6 @@ function currentDeathCount() {
       date = "0" + date;
     }
     formattedDate = year + month + date;
-    console.log(formattedDate);
     url = "https://data.cdc.gov/resource/9mfq-cb36.json?submission_date=" + formattedDate;
     $.ajax({
       async: false,
@@ -134,26 +133,23 @@ function currentDeathCount() {
         }
       }
     });
-    console.log(fullDate);
   }
 
+  var deathCount = 0;
   $.ajax({
     async: false,
     url: url,
     dataType: "json",
     success: function(data) {
-      console.log(data.length);
-      var total = 0;
       for (var i=0; i<data.length; i++) {
-        total += parseInt(data[i]["tot_death"]);
+        deathCount += parseInt(data[i]["tot_death"]);
       }
-      console.log(total);
     }
   });
 
   var name = document.createElement("div")
   name.id = "deaths";
-  name.innerHTML = "test";
+  name.innerHTML = deathCount.toLocaleString('en');
 
   document.body.appendChild(name);
 }

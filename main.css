@@ -22,8 +22,8 @@ div#deaths {
   text-align: center;
   height: 100vh;
 
-  font-size: 1000%;
-  opacity: 20%;
+  font-size: 40vmin;
+  opacity: 10%;
 }
 
 div.healthy {
