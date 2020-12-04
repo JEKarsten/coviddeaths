@@ -8,6 +8,7 @@ var MAX_OPACITY = .95;
 var MIN_SPEED = 14;
 var MAX_SPEED = 10;
 var OPTIMIZED_PAGE_WIDTH = 1080;
+var SMALL_WIDTH_STICKY_CONST = 2
 var FREQUENCY = 2;
 var SICKNESS_PROBABILITY = .8;
 var MIN_HEALTHY_TIME = 2;
@@ -24,8 +25,8 @@ function createName() {
   var name = document.createElement("div")
   var speed = randomRange(MAX_SPEED, MIN_SPEED, true);
   speed *= PAGE_WIDTH/OPTIMIZED_PAGE_WIDTH;
-  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    speed *= .6;
+  if (PAGE_WIDTH < OPTIMIZED_PAGE_WIDTH) {
+    speed *= SMALL_WIDTH_STICKY_CONST;
   }
   if (Math.random() < SICKNESS_PROBABILITY) {
     name.className = "sick";
