@@ -171,7 +171,9 @@ jQuery(document).ready(function($) {
       if ($(window).width() != windowWidth) {
           // Update the window width for next time
           windowWidth = $(window).width();
-          location.reload();
+          if (!(/iPad/i.test(navigator.userAgent))) {
+            location.reload();
+           }
       }
   });
 });
