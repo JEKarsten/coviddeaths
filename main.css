@@ -16,14 +16,18 @@ div {
 
 div#deaths {
   z-index: 0;
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  text-align: center;
-  height: 100vh;
+  align-items: center;*/
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100vw;
 
   font-size: 25vw;
+  text-align: center;
   opacity: 10%;
 }
 
