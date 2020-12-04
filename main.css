@@ -11,6 +11,7 @@ div {
   font-weight: bold;
   text-transform: uppercase;
   white-space: nowrap;
+  color: #000;
 }
 
 div#deaths {
@@ -22,7 +23,7 @@ div#deaths {
   text-align: center;
   height: 100vh;
 
-  font-size: 40vmin;
+  font-size: 25vw;
   opacity: 10%;
 }
 
