@@ -7,6 +7,7 @@ var MIN_OPACITY = .70;
 var MAX_OPACITY = .95;
 var MIN_SPEED = 12;
 var MAX_SPEED = 8;
+var OPTIMIZED_PAGE_WIDTH = 1000;
 var FREQUENCY = 2;
 var SICKNESS_PROBABILITY = .8;
 var MIN_HEALTHY_TIME = 2;
@@ -14,13 +15,19 @@ var MAX_HEALTHY_TIME = 2;
 
 var POPULAR_NAMES = ["James",  "John",  "Robert",  "Michael",  "William",  "David",  "Richard",  "Joseph",  "Thomas",  "Charles",  "Christopher",  "Daniel",  "Matthew",  "Anthony",  "Donald",  "Mark",  "Paul",  "Steven",  "Andrew",  "Kenneth",  "Joshua",  "Kevin",  "Brian",  "George",  "Edward",  "Ronald",  "Timothy",  "Jason",  "Jeffrey",  "Ryan",  "Jacob",  "Gary",  "Nicholas",  "Eric",  "Jonathan",  "Stephen",  "Larry",  "Justin",  "Scott",  "Brandon",  "Benjamin",  "Samuel",  "Frank",  "Gregory",  "Raymond",  "Alexander",  "Patrick",  "Jack",  "Dennis",  "Jerry",  "Tyler",  "Aaron",  "Jose",  "Henry",  "Adam",  "Douglas",  "Nathan",  "Peter",  "Zachary",  "Kyle",  "Walter",  "Harold",  "Jeremy",  "Ethan",  "Carl",  "Keith",  "Roger",  "Gerald",  "Christian",  "Terry",  "Sean",  "Arthur",  "Austin",  "Noah",  "Lawrence",  "Jesse",  "Joe",  "Bryan",  "Billy",  "Jordan",  "Albert",  "Dylan",  "Bruce",  "Willie",  "Gabriel",  "Alan",  "Juan",  "Logan",  "Wayne",  "Ralph",  "Roy",  "Eugene",  "Randy",  "Vincent",  "Russell",  "Louis",  "Philip",  "Bobby",  "Johnny",  "Bradley",  "Mary",  "Patricia",  "Jennifer",  "Linda",  "Elizabeth",  "Barbara",  "Susan",  "Jessica",  "Sarah",  "Karen",  "Nancy",  "Lisa",  "Margaret",  "Betty",  "Sandra",  "Ashley",  "Dorothy",  "Kimberly",  "Emily",  "Donna",  "Michelle",  "Carol",  "Amanda",  "Melissa",  "Deborah",  "Stephanie",  "Rebecca",  "Laura",  "Sharon",  "Cynthia",  "Kathleen",  "Amy",  "Shirley",  "Angela",  "Helen",  "Anna",  "Brenda",  "Pamela",  "Nicole",  "Samantha",  "Katherine",  "Emma",  "Ruth",  "Christine",  "Catherine",  "Debra",  "Rachel",  "Carolyn",  "Janet",  "Virginia",  "Maria",  "Heather",  "Diane",  "Julie",  "Joyce",  "Victoria",  "Kelly",  "Christina",  "Lauren",  "Joan",  "Evelyn",  "Olivia",  "Judith",  "Megan",  "Cheryl",  "Martha",  "Andrea",  "Frances",  "Hannah",  "Jacqueline",  "Ann",  "Gloria",  "Jean",  "Kathryn",  "Alice",  "Teresa",  "Sara",  "Janice",  "Doris",  "Madison",  "Julia",  "Grace",  "Judy",  "Abigail",  "Marie",  "Denise",  "Beverly",  "Amber",  "Theresa",  "Marilyn",  "Danielle",  "Diana",  "Brittany",  "Natalie",  "Sophia",  "Rose",  "Isabella",  "Alexis",  "Kayla",  "Charlotte"];
 
+/**
+ * Generates name-age pairs that scroll from left to right across the screen
+ * All elements are deleted from the DOM after it travels twice the screen's width (set in CSS file)
+ * All controls are set via global variables
+ */
 function createName() {
   var name = document.createElement("div")
-  var speed = randomRange(MAX_SPEED, MIN_SPEED, true); // optimized for width of 1000px
-  speed *= PAGE_WIDTH/1000
-
+  var speed = randomRange(MAX_SPEED, MIN_SPEED, true);
+  speed *= PAGE_WIDTH/OPTIMIZED_PAGE_WIDTH;
   if (Math.random() < SICKNESS_PROBABILITY) {
     name.className = "sick";
+  } else {
+    name.className = "healthy";
   }
 
   name.style.top = randomRange(PAGE_TOP, PAGE_BOTTOM, false) + "px";
@@ -38,7 +45,7 @@ function createName() {
 
 /**
  * Returns a random name
- * Names are taken from ___
+ * Names are taken from a list of the 200 most common names in the United States
  * 
  * @return {String} A random name
  */
@@ -48,8 +55,7 @@ function genName() {
 
 /**
  * Returns a person's age
- * Ages are calculated based off of COVID-19 death rates per age range
- * reported by the CDC as of November 11, 2020
+ * Ages are calculated based off of COVID-19 death rates per age range reported by the CDC as of November 11, 2020
  * 
  * @return {int} An age from 5-94
  */
@@ -87,6 +93,67 @@ function randomRange(min, max, round) {
   }
 }
 
+/**
+ * Reloads the current page
+ */
 function reload() {
   location.reload();
+}
+
+/**
+ * Adds the current COVID total death count to the background
+ * Data is gathered from the CDC's COVID-19 open database
+ * Loops backwards through days starting at current date to find most recent data
+ */
+function currentDeathCount() {
+  var url = "";
+  var empty = true;
+  var fullDate = new Date();
+  while (empty) {
+    var year = fullDate.getFullYear().toString() + "-";
+    var month = (fullDate.getMonth() + 1).toString() + "-";
+    if (month.length < 2) {
+      month = "0" + month;
+    }
+    var date = fullDate.getDate().toString();
+    if (date.length < 2) {
+      date = "0" + date;
+    }
+    formattedDate = year + month + date;
+    console.log(formattedDate);
+    url = "https://data.cdc.gov/resource/9mfq-cb36.json?submission_date=" + formattedDate;
+    $.ajax({
+      async: false,
+      url: url,
+      dataType: "json",
+      success: function(data) {
+        if (data.length == 0) {
+          fullDate.setDate(fullDate.getDate()-1);
+        } else {
+          empty = false;
+        }
+      }
+    });
+    console.log(fullDate);
+  }
+
+  $.ajax({
+    async: false,
+    url: url,
+    dataType: "json",
+    success: function(data) {
+      console.log(data.length);
+      var total = 0;
+      for (var i=0; i<data.length; i++) {
+        total += parseInt(data[i]["tot_death"]);
+      }
+      console.log(total);
+    }
+  });
+
+  var name = document.createElement("div")
+  name.id = "deaths";
+  name.innerHTML = "test";
+
+  document.body.appendChild(name);
 }
