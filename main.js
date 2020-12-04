@@ -99,3 +99,57 @@ function randomRange(min, max, round) {
 function reload() {
   location.reload();
 }
+
+/**
+ * Adds the current COVID total death count to the background
+ * Data is gathered from the CDC's COVID-19 open database
+ * Loops backwards through days starting at current date to find most recent data
+ */
+function currentDeathCount() {
+  var url = "";
+  var empty = true;
+  var fullDate = new Date();
+  while (empty) {
+    var year = fullDate.getFullYear().toString() + "-";
+    var month = (fullDate.getMonth() + 1).toString() + "-";
+    if (month.length < 2) {
+      month = "0" + month;
+    }
+    var date = fullDate.getDate().toString();
+    if (date.length < 2) {
+      date = "0" + date;
+    }
+    formattedDate = year + month + date;
+    url = "https://data.cdc.gov/resource/9mfq-cb36.json?submission_date=" + formattedDate;
+    $.ajax({
+      async: false,
+      url: url,
+      dataType: "json",
+      success: function(data) {
+        if (data.length == 0) {
+          fullDate.setDate(fullDate.getDate()-1);
+        } else {
+          empty = false;
+        }
+      }
+    });
+  }
+
+  var deathCount = 0;
+  $.ajax({
+    async: false,
+    url: url,
+    dataType: "json",
+    success: function(data) {
+      for (var i=0; i<data.length; i++) {
+        deathCount += parseInt(data[i]["tot_death"]);
+      }
+    }
+  });
+
+  var name = document.createElement("div")
+  name.id = "deaths";
+  name.innerHTML = deathCount.toLocaleString('en');
+
+  document.body.appendChild(name);
+}
